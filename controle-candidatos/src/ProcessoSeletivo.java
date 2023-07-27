@@ -1,19 +1,69 @@
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ProcessoSeletivo {
     public static void main(String[] args) throws Exception {
-        imprimirSelecionados();
+       String [] candidatosSelecionados = imprimirSelecionados();
+       int nro = 0;
+       for (String candidato: candidatosSelecionados){
+           if (candidato != "Sem cadidato com pretenção Salarial menor ou igual ao salario BASE" ){
+               nro++;               
+           }        
+       }     
+       String [] candidatosParaLigar = new String[nro];
+       for(int i=0; i<nro; i++){
+        candidatosParaLigar[i] = candidatosSelecionados[i];
+       }
+       
+       for(String candidato: candidatosParaLigar){
+            ligacao(candidato);
+       }
+        
         
 
     }
 
-    static void imprimirSelecionados(){
+    static void ligacao(String candidato){
+        
+
+        int tentativasRealizadas = 1;
+		boolean continuarTentando = true;
+		boolean atendeu=false;
+		do {
+			atendeu= atender();
+			continuarTentando = !atendeu;
+			if(continuarTentando)
+				tentativasRealizadas++;
+			else
+				System.out.println("CONTATO REALIZADO COM SUCESSO PARA "+ candidato);
+			
+		}while(continuarTentando && tentativasRealizadas<3);
+		
+		if(atendeu)
+			System.out.println("CONSEGUIMOS CONTATO COM " + candidato +" NA " + tentativasRealizadas + " TENTATIVA");
+		else
+			System.out.println("NÃO CONSEGUIMOS CONTATO COM " + candidato +", NÚMERO MAXIMO TENTATIVAS " + tentativasRealizadas + " REALIZADA");
+    
+
+    }
+
+
+	//método auxiliar
+	static boolean atender() {
+		return new Random().nextInt(3)==1;	
+	}
+
+
+
+
+    static String[] imprimirSelecionados(){
         
         String [] candidatosFinais = selecaoCandidatos();
         System.out.println("Imprimindo a lista de candidatos informando o indice do elemento");
         for(int indice=0; indice<5; indice++){
             System.out.println("o Candidato de nº "+(indice+1)+" é o "+candidatosFinais[indice]);
         }
+        return candidatosFinais;
 
     }
 
